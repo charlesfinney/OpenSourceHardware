@@ -1,0 +1,1082 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Open Source Hardware Toolbox and Life Philosophy</title>
+    <style>
+      :root {
+        --primary-color: #80c342;
+        --secondary-color: #4baad5;
+        --tertiary-color: #7c84c0;
+        --background-color: #f0f0f0;
+        --text-color: #333;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+      header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 20px;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      h1 {
+        margin: 0;
+        font-size: 2.5em;
+      }
+      nav {
+        position: fixed;
+        top: 80px;
+        left: 20px;
+        width: 250px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+      }
+      nav ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      nav ul li {
+        margin-bottom: 10px;
+      }
+      nav ul li a {
+        color: var(--text-color);
+        text-decoration: none;
+        display: block;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+      nav ul li a:hover {
+        background-color: var(--primary-color);
+        color: white;
+      }
+      main {
+        margin-left: 290px;
+        padding: 100px 40px 40px;
+      }
+      .section {
+        margin-bottom: 40px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .hero {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+      }
+      .hero-bubble {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        text-align: center;
+        margin: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .hero-bubble:nth-child(1) {
+        background-color: var(--primary-color);
+      }
+      .hero-bubble:nth-child(2) {
+        background-color: var(--secondary-color);
+      }
+      .hero-bubble:nth-child(3) {
+        background-color: var(--tertiary-color);
+      }
+      .hero-bubble:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      }
+      .project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+      }
+      .project-card {
+        background-color: white;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .project-card img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+      }
+      .quote {
+        font-style: italic;
+        font-size: 1.2em;
+        margin: 20px 0;
+        padding: 10px;
+        border-left: 5px solid var(--primary-color);
+        background-color: #f9f9f9;
+      }
+      .expandable-content {
+        max-height: 100px;
+        overflow: hidden;
+        transition: max-height 0.5s ease-out;
+      }
+      .expanded {
+        max-height: 2000px;
+      }
+      .expand-btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+      .expand-btn:hover {
+        background-color: var(--secondary-color);
+      }
+      .language-switcher {
+        display: flex;
+        align-items: center;
+      }
+      .language-switcher button {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 1em;
+        margin-left: 10px;
+      }
+      .language-switcher button.active {
+        font-weight: bold;
+        text-decoration: underline;
+      }
+      @media (max-width: 768px) {
+        nav {
+          display: none;
+        }
+        main {
+          margin-left: 0;
+          padding: 100px 20px 20px;
+        }
+        .hero-bubble {
+          width: 120px;
+          height: 120px;
+          font-size: 16px;
+        }
+      }
+      .avatar {
+        float: left;
+        margin-right: 20px;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Open Source Hardware</h1>
+      <h2>Toolbox and Life Philosophy</h2>
+      <div class="language-switcher">
+        <button onclick="switchLanguage('en')" class="active">EN</button>
+        <button onclick="switchLanguage('de')">DE</button>
+        <button onclick="switchLanguage('ukr')">UKR</button>
+      </div>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="#foreword">Foreword</a></li>
+        <li><a href="#what-is-osh">What is OSH?</a></li>
+        <li><a href="#goals">Goals and Opportunities</a></li>
+        <li><a href="#examples">Examples</a></li>
+        <li>
+          <a href="#interviews">Interviews</a>
+          <ul>
+            <li>Moe</li>
+            <li>Interview Paul Anca and Ken Rostand &ndash; Open Funk</li>
+          </ul>
+        </li>
+
+        <li><a href="#documentation">Documentation</a></li>
+        <li><a href="#intellectual-property">Intellectual Property</a></li>
+        <li><a href="#business-models">Business Models</a></li>
+        <li><a href="#future">Future of OSH</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <section class="hero">
+        <div class="hero-bubble">UK</div>
+        <div class="hero-bubble">DE</div>
+        <div class="hero-bubble">UKR</div>
+      </section>
+
+      <section id="foreword" class="section">
+        <h2>Foreword</h2>
+        <div class="expandable-content">
+          <p>
+            Nowadays, every innovation builds on countless previous
+            developments. Just with the invention of the printing press, there
+            wouldn't be any books. Materials and processes, like paper, ink, and
+            binding, are disciplines that have been optimized over centuries.
+            The book, as we know it today, would not be conceivable without
+            collaboration and the sharing of knowledge.
+          </p>
+          <p>
+            Although the printing press and the internet have made it possible
+            to share knowledge like never before, companies, politics, and
+            unfortunately, research often take a different path. Patent
+            knowledge and technical solutions as ownable goods is a
+            comparatively young idea in human history. This leads to technical
+            knowledge being collected and privatized by individual companies.
+            They determine which ideas are pursued and which are not, often
+            based on economic factors, with ecological and social arguments
+            being secondary.
+          </p>
+          <p>
+            The idea behind open-source hardware is to optimize resource use and
+            tackle global challenges together. An open invention can democratize
+            knowledge and activate the community's innovative power.
+          </p>
+        </div>
+        <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="foreword-content"
+        >
+          Read More
+        </button>
+      </section>
+
+      <section id="what-is-osh" class="section">
+        <h2>What is Open-Source Hardware?</h2>
+        <div class="expandable-content">
+          <p>
+            Hardware refers to tangible objects, such as furniture, textiles,
+            machines, or electronic devices. Open-source hardware involves
+            making the knowledge to replicate and further develop these products
+            freely accessible. This includes all relevant information like
+            design, construction, components, and instructions, collectively
+            referred to as documentation.
+          </p>
+          <p>
+            By having open access to this knowledge, users can understand how a
+            product works and how it is made or replicated. This creates trust
+            and transparency regarding quality, safety, and sustainability.
+            Various approaches can be developed and tested in co-creative
+            processes.
+          </p>
+          <p>
+            The community forms the basis of the open-source hardware movement.
+            Individuals and different groups, such as NGOs, companies, and
+            research institutes, share common inventions and form a community of
+            interest. Motivations vary, including progress, community, global
+            justice, and idealistic values.
+          </p>
+
+          <img
+            src="./images/openhardware.png"
+            alt="Open Source Hardware Lifecycle"
+            style="max-width: 100%; height: auto"
+          />
+        </div>
+        <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="what-is-osh-content"
+        >
+          Read More
+        </button>
+      </section>
+
+      <section id="goals" class="section">
+        <h2>Goals and Opportunities</h2>
+        <div class="expandable-content">
+          <p>
+            The vision of open-source hardware (OSH) is to make technology
+            accessible to all humanity, promoting the common good. OSH seeks a
+            collective knowledge base and serves the freedom to learn. The
+            principles of the circular economy, which are fundamental to
+            open-source hardware, focus on sustainable resource use. This leads
+            to the development of environmentally friendly innovations and
+            technologies that conserve resources and minimize waste.
+          </p>
+          <p>
+            The open-source approach ensures repairability, availability of
+            spare parts, and minimizes waste. Local, adaptable productions are
+            promoted to meet community and individual needs. Transparency and
+            accessibility of knowledge encourage collaboration on collective
+            projects to solve societal challenges. OSH supports the longevity of
+            technologies and their rapid, targeted scalability and
+            reproducibility through innovative decentralized production methods.
+            The diversity of skills promotes holistic development, and the
+            community motivates everyone to participate and learn, leading to
+            diverse projects where knowledge is built collectively.
+          </p>
+          <p>
+            People can actively participate to promote their self-realization
+            and be creative and productive. This allows them to make a
+            difference while bringing in personal skills and interests. The open
+            nature of OSH encourages working together on challenges and creating
+            innovative solutions, a significant source of individual fulfillment
+            and collective progress.
+          </p>
+        </div>
+        <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="goals-content"
+        >
+          Read More
+        </button>
+      </section>
+
+      <section id="How-is-Open-Source-Hardware-Financed?" class="section">
+        <h2>How is Open-Source Hardware Financed?</h2>
+        <div class="expandable-content">
+          <p>
+            There are many ways for OSH business models, with resources being
+            accessed in different ways. Increasingly, OSH projects receive
+            funding from countries, federal governments, or the EU. Large
+            corporations recognize the opportunities and invest in the movement
+            and specific project developments.
+          </p>
+          <p>
+            However, the most important support OSH receives is from the people
+            forming a community. They engage directly in the development
+            process, improving and expanding it with diverse knowledge.
+            Different areas of expertise are managed by individual competencies.
+            The community also contributes financially. Besides donations, the
+            product is purchased in its entirety, as a kit, or in specific
+            individual parts. Financial support for development comes from
+            individual motivations, with people actively participating in
+            progress and supporting the OSH movement.
+          </p>
+        </div>
+        <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="goals-content"
+        >
+          Read More
+        </button>
+      </section>
+
+      <section id="" class="section">
+        <h2>Who Owns the Knowledge?</h2>
+        <div class="expandable-content">
+          <p>
+            All documentation is copyrighted from the moment of creation, making
+            it proprietary. Through an open-source license, it becomes freely
+            accessible again. Commonly used licenses include CERN OHL, TAPR OHL,
+            Creative Commons, and GNU GPL.
+          </p>
+          <p>
+            The choice of license determines how intellectual property is
+            protected and shared. These enable the use, adaptation, and sharing
+            of knowledge under certain conditions. More information about
+            licenses for your project can be found in the chapter
+            &quot;Intellectual Property and Licenses.&quot;
+          </p>
+        </div>
+        <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="goals-content"
+        >
+          Read More
+        </button>
+      </section>
+      <section
+        id="Where is the Line Between Consumers and Developers in OSH?"
+        class="section"
+      >
+        <h2>Where is the Line Between Consumers and Developers in OSH?</h2>
+        <div class="expandable-content">
+          <p>
+            Unlike proprietary projects, where there is a clear separation
+            between producers and consumers, OSH overcomes this boundary and
+            allows users to become prosumers. This role means more than just
+            consuming &ndash; prosumers can be part of the development
+            processes. They have the option to actively participate in product
+            design without necessarily being part of the core team. This creates
+            a cooperative network between those who use products and those who
+            design them.
+          </p>
+        </div>
+        <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="goals-content"
+        >
+          Read More
+        </button>
+      </section>
+
+      <section
+        id="Why Isn&#39;t Open-Source Hardware More Widespread?"
+        class="section"
+      >
+        <h2>Why Isn&#39;t Open-Source Hardware More Widespread?</h2>
+        <div class="expandable-content">
+          <p>
+            Despite its many advantages, the OSH idea is only beginning to
+            realize its potential. Possible challenges include traditional
+            business models, intellectual property, and market structures
+            prioritizing commercial interests. To promote dissemination, these
+            need to be reconsidered. Knowledge transfer and active engagement
+            require time and resources. Awareness of OSH must also grow to
+            support broader recognition. Particularly, open-source hardware
+            should be more firmly anchored in educational institutions to enable
+            future generations to access the collaborative mindset.
+          </p>
+        </div>
+        <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="goals-content"
+        >
+          Read More
+        </button>
+      </section>
+      <section
+        id="How Does Collaboration and Knowledge Sharing Work in the
+        Community?"
+        class="section"
+      >
+        <h2>
+          How Does Collaboration and Knowledge Sharing Work in the Community?
+        </h2>
+        <div class="expandable-content">
+          <p>
+            Collaboration extends through personal interactions in real life and
+            online platforms. Development starts with project proposals and
+            ideas. Using version control systems like Git, changes are
+            coordinated, often by creating forks (copies) of the project before
+            merging them into the main project. Open exchange occurs through
+            commenting and discussion.
+          </p>
+          <p>
+            In the world of open-source software, there are remarkable examples.
+            Linux, an open-source operating system, is developed by an
+            international community and widely used. Blender, a popular
+            open-source 3D graphics software, also benefits from collaborative
+            development. These projects successfully use similar principles to
+            create high-quality and accessible software for everyone.
+          </p>
+        </div>
+        <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="goals-content"
+        >
+          Read More
+        </button>
+      </section>
+      <section id="How Can I Enter the OSH World?" class="section">
+        <h2>How Can I Enter the OSH World?</h2>
+        <div class="expandable-content">
+          <p>
+            Talk to people already connected to the community or write to an
+            organization in the movement. Find an OSH project that interests
+            you, get in touch, and see if you can contribute. You can start with
+            open resources and community platforms to learn more about OSH
+            principles. Experiment with projects, share ideas, and work with
+            others to develop your own innovations.
+          </p>
+          <p></p>
+          <p></p>
+        </div>
+        <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="goals-content"
+        >
+          Read More
+        </button>
+      </section>
+
+      <section id="examples" class="section">
+        <h2>Examples of OSH Projects</h2>
+        <p>
+          The following are examples of OSH projects, and further down we give
+          you a broad overview of the various organizations in the OSH movement.
+        </p>
+        <div class="project-grid">
+          <div class="project-card">
+            <h3>MNT Reform Laptop</h3>
+            <p>
+              - An open-hardware laptop focused on transparency and open-source
+              software, emphasizing modification options and repairability.
+            </p>
+            <img src="./images/MNT-Reform-Laptop.png" alt="MNT Reform Laptop" />
+          </div>
+          <div class="project-card">
+            <img src="./images/Arduino.png" alt="" />
+            <h3>Arduino</h3>
+            <p>
+              An open-source electronics platform based on easy-to-use hardware
+              and software. It's designed for anyone interested in creating
+              interactive projects.
+            </p>
+          </div>
+          <div class="project-card">
+            <h3>#ASKotec</h3>
+            <p>
+              - A comprehensive toolkit designed for mobile use without
+              electricity or internet, aimed at combining education and peace
+              promotion.
+            </p>
+            <img src="./images/ASKotec.png" alt="" />
+          </div>
+          <div class="project-card">
+            <h3>OpenFlexure Microscope</h3>
+            <p>
+              - An affordable and high-resolution open-source microscope
+              developed for research and medical diagnostics, using readily
+              accessible hardware.
+            </p>
+            <img
+              src="./images/OpenFlexure-Microscope.png"
+              alt="OpenFlexure Microscope"
+            />
+          </div>
+          <div class="project-card">
+            <img src="./images/KInsecta.png" alt="" />
+            <h3>KInsecta</h3>
+            <p>
+              - Digitally and automatically captures local insect diversity,
+              using image recognition based on machine learning to identify
+              various insect species.
+            </p>
+          </div>
+          <div class="project-card">
+            <h3>OSI² ONE</h3>
+            <p>
+              - The first open-source MRI scanner made predominantly from
+              open-source hardware and software components, exemplifying
+              sustainable global collaboration in medical device development.
+            </p>
+            <img src="./images/OSI²-ONEi.png" alt="" />
+          </div>
+          <div class="project-card">
+            <img src="./images/Metabraille.png" alt="" />
+            <h3>Metabraille</h3>
+            <p>
+              - A mobile Braille keyboard for smartphones, supporting blind
+              individuals by using the Braille alphabet.
+            </p>
+          </div>
+          <div class="project-card">
+            <h3>LibreSolar</h3>
+            <p>
+              - Provides an open charge controller and battery management system
+              for solar energy, facilitating easier access to electricity.
+            </p>
+            <img src="./images/LibreSolar.png" alt="Libresolar" />
+          </div>
+          <div class="project-card">
+            <img src="./images/RepRap.png" alt="RepRap" />
+            <h3>RepRap</h3>
+            <p>
+              - Self-replicating 3D printers enabling sustainable and
+              cost-effective manufacturing.
+            </p>
+          </div>
+        </div>
+        <p>
+          Do you know of other projects? Get in touch with us!
+          <a href="mailto:verein@ose-germnay.de">verein@ose-germnay.de</a>
+        </p>
+      </section>
+
+      <section id="interview-Moe" class="section">
+        <h2>Interview Moe "Martin Häuer"</h2>
+        <div class="interview">
+          <h3>Interview - OSEG e.V.</h3>
+          <div class="interview-details">
+            <img
+              src="./images/martin-hauer.png"
+              alt="Martin Häuer"
+              class="avatar"
+            />
+            <p>
+              Martin Häuer, also known as Moe, is a project coordinator,
+              activist, researcher and developer in the open source hardware
+              sector. He has been with OSEG e.V. since 2018 and has also grown
+              shortly after joining the board. He is mainly interested in the
+              meta-topics: Community-based organisational governance,
+              standardisation and the socio-economic and socio-ecological impact
+              of open source hardware. He is currently working at the Open
+              Source Imaging Initiative on the further development of an open
+              source MRI and its organisational infrastructure.
+            </p>
+          </div>
+          <div>
+            <h3>
+              How did the "Open Source Ecology Germany e. V." Association Come
+              About?
+            </h3>
+            <p>
+              Moe: The open-source hardware movement gained significant momentum
+              in the USA in the early 2000s. Marcin Jakubowski founded the "Open
+              Source Ecology" network and the central project "Global Village
+              Construction Set." In 2011, his widely referenced TED talk created
+              quite a stir globally. In Germany, the response was particularly
+              sustainable, leading to the formation of a relatively stable
+              community under the label "Open Source Ecology Germany."
+              Initially, the development of open-source hardware was almost
+              exclusively based on "self-exploitation" – people invested their
+              free time or donated money directly to individuals within the
+              community. It quickly became clear that this was not a sustainable
+              business model. It also became apparent that a legal entity was
+              needed to manage collective property (such as a solar plant) and
+              conduct PR for political demands. However, it wasn't until 2016
+              that the non-profit association "Open Source Ecology Germany e.
+              V." was officially founded.
+            </p>
+            <h3>What Function Does the Association Serve for the Community?</h3>
+            <p>
+              Moe: The association was understood from the beginning as a pure
+              tool for the community – essentially a legal vehicle that allows
+              us to do various things. It primarily serves as an interface to
+              the "old world." In other words, conventional organizations find
+              it very difficult to enter into contracts with a community. The
+              association forms the legal bridge for this. For example, as a
+              non-profit association with a research purpose, we can acquire and
+              manage public funding for open-source hardware development – which
+              has become by far our main source of income. We can carry out
+              public relations, especially political, much more effectively.
+              Together, we can appear under the label of a non-profit legal
+              entity at major conferences, sit on committees and panels, and
+              draft statements on legislative proposals of the Thuringian State
+              Parliament. All of this is managed collectively and without any
+              form of command chains or classical hierarchy patterns. If we did,
+              the association would lose its connection to the community and
+              thus its founding purpose. Ultimately, the association is like a
+              Swiss Army knife for the community.
+            </p>
+            <p>
+              Over the years, it has also increasingly taken on a platform
+              character. The association maintains a fairly decent digital and
+              physical infrastructure for its members and the community:
+              Nextcloud, GitLab, Hedgedoc, forum, wiki, email mailboxes, etc. on
+              the digital side, as well as OpenEcoLabs, tools, machines, office
+              and seminar rooms on the physical side. We offer everything a
+              willing developer needs to turn an idea into well-documented
+              open-source hardware or take it to the next level. In our
+              community, we also pool a lot of expertise, from documentation
+              guidelines to legal questions and business models. Much of this
+              expertise is networked through the association and its
+              infrastructure – and there are always people involved. They often
+              become members and expand the association further – and so new
+              tools are added to the Swiss Army knife, so to speak.
+            </p>
+          </div>
+          <h3>Can you briefly introduce a project within the association?</h3>
+          <p>
+            Moe: My personal favorite project in the association is
+            &quot;ZAC+,&quot; a zinc-air fuel cell. The maintainer behind it is
+            Oliver Schl&uuml;ter. The problem was that Oli could store the
+            energy from his solar plant with battery systems from day to night,
+            but not sensibly from summer to winter. So, a long-term storage
+            solution was needed that is relatively easy to manufacture and
+            maintain, without toxic or extremely expensive materials. Such a
+            system could be manufactured almost anywhere in the world and
+            repaired independently of the manufacturer. Zinc and oxygen are an
+            excellent combination for this purpose. Industrial solutions have
+            never really taken off, but they were more aimed at integrated
+            battery systems. The peculiarity of ZAC+ is that the
+            &quot;combustion process&quot; (electricity generation) and the
+            &quot;recycling process&quot; (electricity storage) take place in
+            two different stationary devices. This makes the system much
+            simpler, more robust, and cheaper. Oli started with small table
+            setups, mostly self-financed, and the association occasionally
+            supported him with donation funds. Later, adjacent projects (such as
+            the OpenNanoGrid) also received funding, which of course gave the
+            project a boost. In cooperation with universities, mathematical and
+            chemical theses could also be written. We also had a cooperation
+            with an engineering office for several years, which was also a
+            supporting member of the association at that time. Without the
+            association as a legal entity, much of this would have been
+            difficult to impossible.
+          </p>
+          <h3>
+            hat makes the association unique? And how does the association
+            ensure that the voices of the community are heard?
+          </h3>
+          <p>
+            Moe: As a non-profit association, we are not committed to a business
+            model but to our statutes, our non-profit purpose, and thus our
+            values. As a community-based association, we also have a very
+            different administrative structure than conventional associations.
+            One-sided communication and decisions, unnecessary bureaucracy, or
+            command chains simply do not work in a community context. And
+            without the community, the association wouldn&#39;t exist! We
+            couldn&#39;t implement any of our projects or meaningfully serve any
+            of our statutory purposes. All members of the association are also
+            part of the community, and without this connection, we couldn&#39;t
+            work. Consequently, everything developed in the association is open
+            source. All our developments are thus independent of the association
+            and can be further developed in another part of the world. This
+            model alone protects the association from becoming corrupted.
+          </p>
+          <p>
+            If we want to organize technologies collectively as humanity &ndash;
+            and we must if we are to make it to the next century &ndash; it must
+            be open-source hardware.
+          </p>
+          <h3>
+            How do you see the future of OSH, and what development would you
+            like to see?
+          </h3>
+          <p>
+            Moe: The preamble to the DIN SPEC 3105 already states that we aim
+            for a technological mainstream. It is important that not only in
+            science but also in all publicly funded areas, open source becomes
+            the standard solution. Otherwise, research from countries with less
+            industrial infrastructure would be excluded. The vision is for OSH
+            to become an industrial mainstream as well. This would fundamentally
+            change our economy and its ecological compatibility &ndash; towards
+            cooperative economies. Of course, there are also certain market
+            entry barriers with open-source hardware. However, the old question
+            of ownership is very elegantly solved, in my opinion:
+          </p>
+          <p>
+            It doesn&#39;t really matter who owns the individual machine,
+            whether it&rsquo;s a state or a company &ndash; as long as everyone
+            has the right and the means to manufacture and further develop it.
+            The next step, in my view, is to continue professionalizing
+            collective technology development: product certification, clinical
+            approval of medical technology, internal community quality
+            standards, etc. These processes also need to be made more open to
+            facilitate cooperative work. This has a lot to do with
+            standardization, but also with scalable models for community-based
+            organizational leadership. We as a movement still need to grow into
+            this. And that is happening right now. It&#39;s already pretty cool.
+          </p>
+          <h3>Any final thoughts or messages you would like to share?</h3>
+          <p>
+            Moe: I am here [at OSEG] because I didn&#39;t want to waste my life
+            as an engineer in the industry but wanted to use my skills for the
+            benefit of society. I can do this because of my privileges. We are
+            building infrastructure here to enable people to advance
+            socio-economic and ecological change at a low threshold. In short, I
+            think it has never been so easy to work for social transformation
+            and make a living from it if you want to. You don&#39;t have to sell
+            your soul or sacrifice your future. None of that &ndash; you can
+            just do it. And that is such a huge privilege that I, as a white,
+            cis-male Central European with an academic background, almost feel
+            it is my duty to use it. I have always waited for the day when my
+            activism would hit hard limits, receive threatening calls, and the
+            like. That I could no longer continue or couldn&#39;t because I
+            lacked the means or lost the courage fighting windmills. None of
+            that happened. They say nothing is stronger than an idea whose time
+            has come. And this one is really overdue.
+          </p>
+
+          <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="goals-content"
+        >
+          Read More
+        </button>
+        </div>
+      </section>
+
+      <section id="interview-Moe" class="section">
+        <h2>Interview - From Idea to Reality</h2>
+        <div class="interview">
+          <h3>Synergy for a Better Future</h3>
+          <div class="interview-details">
+            <img
+              src="./images/paul-anca+ken-rostand.png"
+              alt="Paul anca & ken rostand"
+              
+            />
+            <p>Paul Anca and Ken Rostand are the co-founders of Open Funk. re:Mix went
+                through the review process, whose process is presented on page 28. The
+                following interview sheds light on the path towards open-source hardware
+                from a startup perspective.</p>
+            <h3>What is re:Mix?</h3>
+            <p>re:Mix is a sustainable kitchen mixer specifically designed for use
+                with mason jars and is particularly durable. re:Mix is easily
+                repairable, modular, and open source.</p>
+                <h3>What was your motivation to start an OSH startup?</h3>
+                <p>From electronic waste and enormous CO&#8322; emissions to poor working
+                    conditions and long supply chains &ndash; the home electronics industry
+                    contributes to some of the world&#39;s most serious environmental and
+                    human rights problems of our time. We want to change the way household
+                    electronics are made and repaired. We see the circular economy as one of
+                    the key approaches to solving these problems.
+                </p>
+                <p>Actors need to share information along the supply chain: What materials
+                    were used, where did they come from, and how can they be reused? At the
+                    same time, products must be designed for the circular economy from the
+                    start &ndash; repairable and modular.</p>
+                    
+
+            
+
+      <section id="documentation" class="section">
+        <h2>Documentation</h2>
+        <p>
+          Good documentation is crucial for open-source hardware projects. It
+          enables others to understand, replicate, and improve upon your work.
+        </p>
+        <img
+          src="path_to_documentation_diagram.jpg"
+          alt="Documentation Process"
+          style="max-width: 100%; height: auto"
+        />
+      </section>
+
+      <section id="DIN SPEC 3105" class="section">
+        <h2>DIN SPEC 3105</h2>
+        <p>DIN SPEC 3105 specifies what is required for the documentation of open source hardware in order to be considered ‘open source’.
+            can be considered ‘open source’. In contrast to software, the documentation of
+            hardware can look very different depending on the project. It is
+            depends on which technologies (mechanical, electronic, etc.) are used in the
+            used in the project and which tools are used to create the parts and plans.
+            are created.</p>
+        <p>DIN SPEC 3105 was developed between October 2018 and July 2020.
+            In addition to OSEG e. V. and the German Institute for Standardisation
+            Institute for Standardisation e. V. (DIN), more than 20 other parties, such as community
+            community organisations, companies and universities were involved.</p>
+        <img
+          src="./images/DIN-SPEC-3105.png"
+          alt="DIN SPEC 3105"
+          style="max-width: 100%; height: auto"
+        />
+        <p>It is subject to continuous testing and further development. The aim of
+            DIN SPEC 3105 is to create clarity in the area of open source hardware.
+            hardware. It defines terms, requirements and processes.
+            This should avoid misunderstandings and improve the quality and interoperability of
+            interoperability of OSH projects. The specification
+            helps to create a common basis for developers, manufacturers and users
+            and users, which facilitates communication, cooperation and
+            co-operation and knowledge exchange is facilitated. It contributes to the further development of the
+            OSH movement by establishing standards for openness, quality and collaboration.
+            quality and co-operation.</p>
+        <p>DIN SPEC 3105 is still very general in its wording, but specifies some
+            but specifies some key points that must be included in open source hardware documentation. Further information on this
+            can be found from page 26-33</p>
+            <p>In addition, DIN SPEC 3105 outlines a process for checking the documentation criteria mentioned.
+                mentioned documentation criteria. This process is
+                referred to as the review process.</p>
+                <button class="expand-btn" aria-expanded="false" aria-controls="goals-content">Read More</button>
+      </section>
+
+      <section id="Review of Open Source Hardware" class="section">
+        <h2>Review of Open Source Hardware</h2>
+        <p>According to DIN SPEC 3105, the review process is carried out by a CAB
+            (&quot;Conformity Assessment Body&quot;)“Konformitätsbewertungsstelle“. This is an independent body
+            that checks and certifies the conformity of products, services, or
+            processes with certain standards and requirements. In the context of
+            open-source hardware, a CAB carries out the certification of OSH
+            projects to ensure that the documentation meets the criteria of DIN SPEC
+            3105.</p>
+        <p>After the publication of DIN SPEC 3105, OSEG e.V. started setting up a
+            CAB to gain experience with the review process and DIN SPEC. Any
+            organization can set up a CAB as long as they store and make the review
+            process and the reviewed documentation public. In addition to OSEG e.V.,
+            OHO e.V. has also established a CAB and has already reviewed many projects.
+        <a href="https://oho.wiki">https://oho.wiki)</a>
+        </p>
+        <p>We at Open Source Ecology Germany e.V. have decided to carry out the
+            review process with the help of the community. We involve all interested
+            parties to review the documentation, rebuild the products, and further
+            develop the process together. On pages 28-35, we give you an insight
+            into the latest projects that have gone through the review
+            process</p>
+            <button class="expand-btn" aria-expanded="false" aria-controls="goals-content">Read More</button>
+      
+
+      </section>
+
+      <section id="CAB 2021" class="section">
+        <h2>CAB 2021</h2>
+        <p>In the first round, we reviewed 15 open-source hardware documentations.
+            Without going into detail about the specific projects, we would like to
+            briefly explain what we learned about the review process.</p>
+        <h3>1. Rebuilding in addition to the theoretical review</h3>
+        <p>During the review of the MNT Reform open-source laptop, it became
+            apparent that the project was so complex that it was very difficult for
+            the reviewers to determine if all the information was available. A
+            practical rebuild based on the documentation would have ensured this.
+            For complex projects, a practical rebuild in addition to the theoretical
+            review is helpful as it generates more valuable feedback.</p>
+        <h3>2. Open-source hardware projects receive feedback</h3>
+        <p>The documentation of an open-source hardware project benefits greatly
+            from a critical and independent four-eye principle. Incomprehensible
+            part descriptions are identified and avoided; sometimes, a picture is
+            needed to make it clearer to rebuilders what it is about.</p>
+        <h3>3. Community Building</h3>
+        <p>The review process supports community building. Through the review, two
+            people are brought closer to the project, requiring them to engage
+            intensively with it.</p>
+        <h3>4. Platform-independent reviewing</h3>
+        <p>A project benefits from the analysis of the documentation even more if
+            the reviewers use not only offline files or our platforms but also the
+            project&#39;s platforms. They also test the documentation structure
+            across different platforms and websites, putting themselves in the
+            perspective of users who stumbled upon the project on the
+            internet.</p>
+            <p>When a rebuild is connected with the review process, it can be ensured
+                that the documentation is complete, and the project receives detailed
+                feedback. This is exactly the goal of the process shown in this booklet.
+                In follow-up projects of the association, open-source hardware projects
+                will not only be theoretically reviewed but also practically
+                rebuilt.</p>
+        <button class="expand-btn" aria-expanded="false" aria-controls="goals-content">Read More</button>
+      
+        <img
+          src="./images/review-lifecycle.png"
+          alt="review-lifecycle"
+          style="max-width: 100%; height: auto"
+        />
+      </section>
+      <section id="" class="section">
+        <h2></h2>
+        <p></p>
+        <button class="expand-btn" aria-expanded="false" aria-controls="goals-content">Read More</button>
+      </section>
+        <img
+          src="."
+          alt=""
+          style="max-width: 100%; height: auto"
+        />
+      </section>
+
+      <section id="intellectual-property" class="section">
+        <h2>Intellectual Property and Licenses</h2>
+        <div class="expandable-content">
+          <p>
+            All documentation is copyrighted from the moment of creation, making
+            it proprietary. Through an open-source license, it becomes freely
+            accessible again. Commonly used licenses include CERN OHL, TAPR OHL,
+            Creative Commons, and GNU GPL.
+          </p>
+        </div>
+        <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="intellectual-property-content"
+        >
+          Read More
+        </button>
+      </section>
+
+      <section id="business-models" class="section">
+        <h2>Open-Source Business Models and Ecosystems</h2>
+        <div class="expandable-content">
+          <p>
+            Open-Source Hardware: From Product Development to Business Model to
+            Ecosystem
+          </p>
+          <p>
+            Without open-source software, the internet and many digital
+            innovations would not be conceivable. In times when urgently needed
+            global solutions must be found, open-source hardware (OSH) seems to
+            play a similarly important role in the physical world.
+          </p>
+        </div>
+        <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="business-models-content"
+        >
+          Read More
+        </button>
+      </section>
+
+      <section id="future" class="section">
+        <h2>The Future of Open Source Hardware</h2>
+        <div class="expandable-content">
+          <p>
+            As we look towards the future, the potential for open-source
+            hardware (OSH) to drive innovation and sustainability is immense.
+            The principles of openness, collaboration, and community-driven
+            development that underpin OSH are more relevant than ever in an era
+            defined by rapid technological change and pressing global
+            challenges.
+          </p>
+        </div>
+        <button
+          class="expand-btn"
+          aria-expanded="false"
+          aria-controls="future-content"
+        >
+          Read More
+        </button>
+        <div class="quote">
+          <img
+            src="./images/victor-hugo.png"
+            alt="Victor Hugo Inspirational Quote"
+            style="max-width: 100%; height: auto"
+          />
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // JavaScript for expandable content and smooth scrolling
+      document.querySelectorAll(".expand-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          const content = button.previousElementSibling;
+          content.classList.toggle("expanded");
+          const expanded = content.classList.contains("expanded");
+          button.textContent = expanded ? "Read Less" : "Read More";
+          button.setAttribute("aria-expanded", expanded);
+        });
+      });
+
+      document.querySelectorAll("nav a").forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute("href")).scrollIntoView({
+            behavior: "smooth",
+          });
+        });
+      });
+
+      function switchLanguage(lang) {
+        // Implement language switching logic here
+        console.log(`Switching to ${lang}`);
+        document
+          .querySelectorAll(".language-switcher button")
+          .forEach((btn) => {
+            btn.classList.toggle(
+              "active",
+              btn.textContent.toLowerCase() === lang,
+            );
+          });
+      }
+    </script>
+  </body>
+</html>
